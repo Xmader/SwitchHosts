@@ -53,11 +53,18 @@ export default class EditPrompt extends React.Component {
   }
 
   componentDidMount () {
-    Agent.on('add_hosts', () => {
+    Agent.on('add_hosts', (title, uri) => {
+      var goWhere = ''
+      if (uri) {
+        goWhere = 'remote'
+      }
       this.setState({
         show: true,
         is_add: true,
-        include: []
+        include: [],
+        title: title,
+        where: goWhere,
+        url: uri
       })
       setTimeout(() => {
         this.tryToFocus()
@@ -241,7 +248,7 @@ export default class EditPrompt extends React.Component {
             <Input
               ref={c => this.el_url = c}
               value={this.state.url}
-              placeholder="http://"
+              placeholder="http:// or file:///"
               onChange={e => this.setState({url: e.target.value})}
               onKeyDown={e => (e.keyCode === 13 && this.onOK()) || (e.keyCode === 27 && this.onCancel())}
             />
